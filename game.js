@@ -1,3 +1,4 @@
+var ship;
 var Game = {
     
     preload: function(){
@@ -9,6 +10,10 @@ var Game = {
     
     create: function(){
         backgroundGame = game.add.tileSprite(0, 0, 400, 540, 'background');
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+        ship = game.add.sprite(game.width/2, 490, 'ship');
+        ship.anchor.setTo(0.5);
+        game.physics.arcade.enable(ship);
     },
     
     update: function(){
