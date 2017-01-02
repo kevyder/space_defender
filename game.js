@@ -6,6 +6,8 @@ var enemies;
 var timer;
 var score;
 var scoretext;
+var lifes;
+var lifestext;
 var Game = {
     
     preload: function(){
@@ -39,16 +41,29 @@ var Game = {
         enemies.setAll('checkWorldBounds', true);
         enemies.setAll('outOfBoundsKill', true);
         
-        timer = game.time.events.loop(2000, this.createEnemy, this);
+        timer = game.time.events.loop(700, this.createEnemy, this);
         score = 0;
+        lifes = 3
         game.add.text(30, 20, "Points:", {font: "14px sans-serif", fill: "#FFF"});
         scoretext = game.add.text(80, 20, "0", {font: "14px sans-serif", fill: "#FFF"});
+        game.add.text(320, 20, "Lifes:", {font: "14px sans-serif", fill: "#FFF"});
+        lifestext = game.add.text(360, 20, "3", {font: "14px sans-serif", fill: "#FFF"});
     },
     
     update: function(){
         ship.rotation = game.physics.arcade.angleToPointer(ship) + Math.PI/2;
         if (game.input.activePointer.isDown){ this.shot() }
         game.physics.arcade.overlap(bullets, enemies, this.collision, null, this);
+        enemies.forEachAlive(function(enemy){
+            if(enemy.position.y > 520 && enemy.position.y < 521){
+                lifes--;
+                lifestext.text = lifes;
+            }
+        });
+        
+        if(lifes == 0){
+            game.state.start('gameover');
+        }
     },
     
     shot: function(){
